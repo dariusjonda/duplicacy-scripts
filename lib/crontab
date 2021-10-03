@@ -7,14 +7,14 @@
 
 # Software update.  Do this well before anything else.
 #Min Hour DoM Mon DoW  Command
-0    0    *   *   *    __BIN__/update
+30   16   *   *   1-6  __BIN__/update
 
 # Backups
 #Min Hour DoM Mon DoW  Command
-45   0    *   *   *    __BIN__/cron-backup
+0    *    *   *   *    __BIN__/cron-backup
 
 # Routine Maintenance
 #Min Hour DoM Mon DoW  Command
-0    3    *   *   *    __BIN__/cron-daily
-15   3    *   *   Sun  __BIN__/cron-weekly
-30   3    1-7 *   Sun  __BIN__/cron-monthly
+0    17   *   *   *    __BIN__/cron-daily
+15   17   *   *   7    __BIN__/cron-weekly
+30   17   1-7 *   7    __BIN__/cron-monthly

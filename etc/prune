@@ -12,7 +12,8 @@
 1	7	# One per day for snapshots older than 7 days
 7	30	# One per week for snapshots older than a month
 30	180	# One per 30 days for snapshots older than 180 days
-0	360	# None older than 360 days
+180	360	# One per 180 days for snapshots older than 360 days
+0	1800	# None older than 1800 days
 
 
 
