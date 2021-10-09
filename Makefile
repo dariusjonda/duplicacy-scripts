@@ -32,6 +32,7 @@ ETC=$(DEST)/etc
 LIB=$(DEST)/lib
 PREFS=$(DEST)/prefs
 VAR=$(DEST)/var
+RESTORE=$(DEST)/restore
 
 CACHE=$(VAR)/cache
 HOLE=$(VAR)/hole
@@ -86,6 +87,11 @@ $(CRONTAB)::
 	mkdir -p $(LIB)
 	sed -e 's|__BIN__|$(BIN)|g' lib/crontab > $@
 
+# Restore
+RESTORE_README=$(RESTORE)/README.md
+$(RESTORE_README)::
+	mkdir -p $(RESTORE)
+	cp restore/README.md $@
 
 # Prime updating with a full copy of the sources unless we're already
 # doing an update from that directory.
@@ -108,6 +114,7 @@ install: clean \
 	$(ETC) \
 	$(LIB) \
 	$(CRONTAB) \
+	$(RESTORE_README) \
 	$(PREFS) \
 	$(LOCATION_FILE) \
 	$(LINKED_BINARY) \
