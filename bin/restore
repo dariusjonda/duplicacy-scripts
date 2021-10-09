@@ -18,7 +18,6 @@
 # Options:
 #
 #   --dest DIR     Restore to DIR instead of their original location.
-#                  DIR must be nonexistant or empty.
 #
 #   --list         List the times of all available snapshots in ISO
 #                  8601 format an exit without restoring anything and
@@ -30,6 +29,19 @@
 #   --time TIME    Restore from the most-recent snapshot in the backup
 #                  set that occurred before the ISO 8601 timestame TIME
 #                  (e.g., 2021-07-03T08:30:00).
+#
+#   --key path     Provide path to RSA private key in order to decrypt
+#                  the restored file properly.
+#                  (e.g., /home/path/to/private/key.pem)
+#                  
+# Example for restoring a single file:
+# restore \
+#     --time 1999-12-24T21:33 \
+#     --dest /opt/duplicacy/restore/ \
+#     --storage storage_id \
+#     --key /home/user/private_key.pem \
+#     /home/user/file/to/be/restored.txt
+#
 #
 #END-HELP
 #
@@ -67,6 +79,10 @@ do
 	    RESTORE_TIME="$1"
 	    shift
 	    ;;
+	--key)
+	    PRIVATE_KEY="$1"
+	    shift
+	    ;;
 	*)
 	    die "Unknown option ${ARG}"
 	    ;;
@@ -87,19 +103,10 @@ fi
 [ "$#" -gt 0 ] \
     || die "Usage: ${WHOAMI} OPTIONS PATH [ PATH ... ]"
 
-if [ -d "${DEST}" ]
-then
-    [ "$(ls -a "${DEST}" | wc -l)" -gt 2 ] \
-	&& die "${DEST}: Must be empty."
-fi
-
 # This validates ISO8601 down to seconds.
 REGEX='^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):[0-5][0-9]$'
 echo "${RESTORE_TIME}" | egrep -q -e "${REGEX}" \
     || die "Invalid time ${RESTORE_TIME}"
-
-
-
 
 
 # Translate all of the arguments into Duplicacy filters
@@ -176,7 +183,8 @@ echo "Restoring from revision ${REVISION} as of ${REVISION_TIME} from ${STORAGE}
 
 if [ -z "${DEST}" ]
 then
-    DEST="${TOP}/root"
+    DEST="${TOP}/restore"
+    echo "${PREFS}" > "${DEST}/.duplicacy"
 else
     mkdir -p "${DEST}"
     echo "${PREFS}" > "${DEST}/.duplicacy"
@@ -191,12 +199,8 @@ echo "Restoring to ${DEST}"
 	    -r "${REVISION}" \
 	    -stats \
 	    -storage "${STORAGE}" \
+	    -key "${PRIVATE_KEY}" \
 	    "$@" \
 )
-
-
-# Clean up any leftovers
-
-rm -rf "${DEST}/.duplicacy"
 
 exit 0
