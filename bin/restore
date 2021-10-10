@@ -184,6 +184,12 @@ echo "Restoring from revision ${REVISION} as of ${REVISION_TIME} from ${STORAGE}
 if [ -z "${DEST}" ]
 then
     DEST="${TOP}/restore"
+
+    if [ ! -d "${DEST}" ]
+    then
+      mkdir "${DEST}"
+    fi
+
     echo "${PREFS}" > "${DEST}/.duplicacy"
 else
     mkdir -p "${DEST}"
