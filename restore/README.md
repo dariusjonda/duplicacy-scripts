@@ -6,7 +6,7 @@ cd into the `$DEST/bin` directory first and type:
 restore \
     --time 1999-12-24T21:33 \
     --dest /opt/duplicacy/restore/ \
-    --storage storage_id \
+    --storage storage_name \
     --key /home/user/private_key.pem \
     /home/user/file/to/be/restored.txt
 ```

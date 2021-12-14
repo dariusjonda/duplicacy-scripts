@@ -23,7 +23,7 @@
 #                  8601 format an exit without restoring anything and
 #                  ignoring all other options except --storage.
 #
-#   --storage ID   Restore from the storage named ID.  If not provided,
+#   --storage NAME Restore from the storage named NAME.  If not provided,
 #                  files will be restored from "default".
 #
 #   --time TIME    Restore from the most-recent snapshot in the backup
@@ -38,7 +38,7 @@
 # restore \
 #     --time 1999-12-24T21:33 \
 #     --dest /opt/duplicacy/restore/ \
-#     --storage storage_id \
+#     --storage storage_name \
 #     --key /home/user/private_key.pem \
 #     /home/user/file/to/be/restored.txt
 #
